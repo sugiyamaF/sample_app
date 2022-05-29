@@ -1,16 +1,21 @@
 class ListsController < ApplicationController
   def new
-    @lists = List.new
+    @list = List.new
   end
 
   def create
-    list = List.new(list_params)
-    list.save
-    redirect_to list_path(list.id)
+    @list = List.new(list_params)
+
+    if @list.save
+      redirect_to list_path(@list.id)
+    else
+      render :new
+    end
+
   end
 
   def index
-    @lists = List.all
+    @list = List.all
   end
 
   def show
@@ -36,6 +41,6 @@ class ListsController < ApplicationController
   private
 
   def list_params
-    params.permit(:title, :body, :image)
+    params.require(:list).permit(:title, :body, :image)
   end
 end
